@@ -10,10 +10,29 @@ on:
 #    - cron: "10 1 * * 0"
 
 jobs:
+  # Build root.tar using Raspberry Pi OS Image file
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get img file and prepare tar
+        run: sudo ./img_to_tar.sh
+
+      - name: Upload output file
+        uses: actions/upload-artifact@v2
+        with:
+          name: root-tar
+          path: root.tar
+          retention-days: 2
+
   # Test the image builds and works correctly.
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs: prepare
 
     steps:
       - uses: actions/checkout@v2
@@ -21,8 +40,10 @@ jobs:
       - name: Install qemu-user-static
         run: sudo apt-get install -y qemu-user-static
 
-      - name: Get img file and prepare tar
-        run: sudo ./img_to_tar.sh
+      - name: Download artifact - root.tar
+        uses: actions/download-artifact@v2
+        with:
+          name: root-tar
 
       - name: Test building image.
         run: docker build -t docker-ansible .
@@ -42,6 +63,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download artifact - root.tar
+        uses: actions/download-artifact@v2
+        with:
+          name: root-tar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
