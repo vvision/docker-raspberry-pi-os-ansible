@@ -89,4 +89,4 @@ jobs:
           # Platform Specifiers: https://github.com/containerd/containerd/blob/v1.4.3/platforms/platforms.go#L63
           platforms: linux/arm
           push: true
-          tags: ${{ github.repository }}:latest
+          tags: vv1s10n/docker-raspberry-pi-os-ansible:latest
