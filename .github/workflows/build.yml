@@ -21,7 +21,14 @@ jobs:
       - name: Get img file and prepare tar
         run: sudo ./img_to_tar.sh
 
-      - name: Upload output file
+      - name: Upload output boot file
+        uses: actions/upload-artifact@v2
+        with:
+          name: boot-tar
+          path: boot.tar
+          retention-days: 2
+
+      - name: Upload output root file
         uses: actions/upload-artifact@v2
         with:
           name: root-tar
@@ -39,6 +46,11 @@ jobs:
 
       - name: Install qemu-user-static
         run: sudo apt-get install -y qemu-user-static
+
+      - name: Download artifact - boot.tar
+        uses: actions/download-artifact@v2
+        with:
+          name: boot-tar
 
       - name: Download artifact - root.tar
         uses: actions/download-artifact@v2
@@ -63,6 +75,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download artifact - boot.tar
+        uses: actions/download-artifact@v2
+        with:
+          name: boot-tar
 
       - name: Download artifact - root.tar
         uses: actions/download-artifact@v2

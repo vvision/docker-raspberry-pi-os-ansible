@@ -1,6 +1,7 @@
 FROM scratch
 LABEL maintainer="Victor Voisin"
 
+ADD boot.tar /boot/
 ADD root.tar /
 
 # Inspired by https://github.com/geerlingguy/docker-debian10-ansible/blob/master/Dockerfile

@@ -33,11 +33,18 @@ LOOP_DEVICE=$(echo "${LOSETUP_STATUS}" | grep -o "\/dev\/loop[0-9]\+")
 echo "loop device used is:"
 echo "${LOOP_DEVICE}"
 
+# boot partition
+# Mount
+mount "${LOOP_DEVICE}p1" /mnt
+# Package to tar
+tar cf boot.tar -C /mnt .
+# Unmount
+umount /mnt
+
+# root partition
 # Mount
 mount "${LOOP_DEVICE}p2" /mnt
-
 # Package to tar
 tar cf root.tar -C /mnt .
-
 # Unmount
 umount /mnt
